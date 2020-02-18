@@ -37,6 +37,21 @@ function university_post_types() {
         'has_archive' => true,
         'public' => true,
     ]);
+
+    register_post_type('professor', [
+        'supports' => [
+            'title', 'editor', 'thumbnail',
+        ],
+        'labels' => [
+            'name' => 'professors',
+            'add_new_item' => 'Add New professor',
+            'edit_item' => 'Edit professor',
+            'all_items' => 'All professors',
+            'singular_name' => 'professor',
+        ],
+        'menu_icon' => 'dashicons-welcome-learn-more',
+        'public' => true,
+    ]);
 }
 
 add_action('init', 'university_post_types');
