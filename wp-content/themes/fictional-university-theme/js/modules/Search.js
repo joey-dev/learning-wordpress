@@ -3,6 +3,8 @@ import $ from 'jquery';
 class Search {
 
     constructor() {
+        this.addSearchHtml();
+
         this.openButton = $(".js-search-trigger");
         this.closeButton = $(".search-overlay__close");
         this.searchOverlay = $(".search-overlay");
@@ -14,6 +16,24 @@ class Search {
         this.isOverlayOpen = false;
         this.isSpinnerVisible = false;
         this.events();
+    }
+
+    addSearchHtml() {
+        $("body").append(`
+            <div class="search-overlay">
+                <div class="search-overlay__top">
+                    <div class="container">
+                        <i class="fa fa-search search-overlay__icon" aria-hidden="true"></i>
+                        <input type="text" class="search-term" placeholder="What are you looking for" id="search-term">
+                        <i class="fa fa-window-close search-overlay__close" aria-hidden="true"></i>
+                    </div>
+                </div>
+    
+                <div class="container">
+                    <div id="search-overlay__results"></div>
+                </div>
+            </div>
+        `);
     }
 
     events() {
@@ -28,6 +48,10 @@ class Search {
     openOverlay() {
         this.searchOverlay.addClass('search-overlay--active');
         $("body").addClass('body-no-scroll');
+        this.searchField.val('');
+        setTimeout( () => {
+            this.searchField.focus()
+        } , 301);
         this.isOverlayOpen = true;
     }
 
@@ -65,8 +89,28 @@ class Search {
     }
 
     getResults() {
-        this.resultsDiv.html('asdsad');
-        this.isSpinnerVisible = false;
+        const searchField = this.searchField.val();
+        const rootUrl = universityData.root_url;
+
+        $.when(
+            $.getJSON(rootUrl + '/wp-json/wp/v2/posts?search=' + searchField),
+            $.getJSON(rootUrl + '/wp-json/wp/v2/pages?search=' + searchField)
+        ).then((posts, pages) => {
+                const results = posts[0].concat(pages[0]);
+                this.resultsDiv.html(`
+                    <h2 class="search-overlay__title">General information</h2>
+                    ${results.length ? '<ul class="link-list min-list">' : '<p>No match</p>'}
+                        ${results.map(result => `
+                            <li>
+                                <a href="${result.link}">${result.title.rendered}</a>
+                            </li>
+                        `).join('')}
+                    ${results.length ? '</ul>' : ''}
+                `);
+                this.isSpinnerVisible = false;
+        }, () => {
+            this.resultsDiv.html('<p>an error has occurred</p>')
+        });
     }
 }
 

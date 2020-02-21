@@ -52,6 +52,10 @@ function university_files() {
 		NULL,
 		microtime()
 	);
+
+    wp_localize_script('main-university-js', 'universityData', [
+        'root_url' => get_site_url(),
+    ]);
 }
 
 add_action('wp_enqueue_scripts', 'university_files');
