@@ -21,7 +21,7 @@ function university_post_types() {
 
     register_post_type('program', [
         'supports' => [
-            'title', 'editor',
+            'title',
         ],
         'labels' => [
             'name' => 'Programs',

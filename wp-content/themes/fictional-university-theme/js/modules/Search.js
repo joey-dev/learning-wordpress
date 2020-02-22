@@ -91,26 +91,80 @@ class Search {
     getResults() {
         const searchField = this.searchField.val();
         const rootUrl = universityData.root_url;
+        const url = rootUrl +  '/wp-json/university/v1/search?term=';
 
-        $.when(
-            $.getJSON(rootUrl + '/wp-json/wp/v2/posts?search=' + searchField),
-            $.getJSON(rootUrl + '/wp-json/wp/v2/pages?search=' + searchField)
-        ).then((posts, pages) => {
-                const results = posts[0].concat(pages[0]);
-                this.resultsDiv.html(`
-                    <h2 class="search-overlay__title">General information</h2>
-                    ${results.length ? '<ul class="link-list min-list">' : '<p>No match</p>'}
-                        ${results.map(result => `
-                            <li>
-                                <a href="${result.link}">${result.title.rendered}</a>
-                                ${result.type === 'post' ? `by ${result.author_name}` : ''}
-                            </li>
-                        `).join('')}
-                    ${results.length ? '</ul>' : ''}
-                `);
-                this.isSpinnerVisible = false;
-        }, () => {
-            this.resultsDiv.html('<p>an error has occurred</p>')
+        $.getJSON(url + searchField, (results) => {
+            console.log(results.generalInfo);
+            this.resultsDiv.html(`
+                <div class="row">
+                    <div class="one-third">
+                        <h2>General information</h2>
+                        ${results.generalInfo.length ? '<ul class="link-list min-list">' : '<p>No match</p>'}
+                            ${results.generalInfo.map(result => `
+                                <li>
+                                    <a href="${result.permalink}">${result.title}</a>
+                                    ${result.postType === 'post' ? `by ${result.author_name}` : ''}
+                                </li>
+                            `).join('')}
+                        ${results.generalInfo.length ? '</ul>' : ''}
+                    </div>
+                    <div class="one-third">
+                        <h2 class="search-overlay__title">Programs</h2>
+                        ${results.programs.length ? '<ul class="link-list min-list">' : '<p>No match</p>'}
+                            ${results.programs.map(result => `
+                                <li>
+                                    <a href="${result.permalink}">${result.title}</a>
+                                </li>
+                            `).join('')}
+                        ${results.programs.length ? '</ul>' : ''}
+                        <h2 class="search-overlay__title">Professors</h2>
+                        ${results.professors.length ? '<ul class="professor-cards">' : '<p>No match</p>'}
+                            ${results.professors.map(result => `
+                                <li class="professor-card__list-item">
+                                    <a class="professor-card" href="${result.permalink}">
+                                        <img src="${result.image}" class="professor-card__image">
+                                        <span class="professor-card__name">
+                                            ${result.title}
+                                        </span>
+                                    </a>
+                                </li>
+                            `).join('')}
+                        ${results.professors.length ? '</ul>' : ''}
+                    </div>
+                    <div class="one-third">
+                        <h2 class="search-overlay__title">Campuses</h2>
+                        <p>No match</p>
+                        <h2 class="search-overlay__title">Events</h2>
+                        ${results.events.length ? '' : '<p>No match</p>'}
+                            ${results.events.map(result => `
+                                <div class="event-summary">
+                                    <a class="event-summary__date t-center" href="${result.permalink}">
+                                        <span class="event-summary__month">
+                                            ${result.month}
+                                        </span>
+                                        <span class="event-summary__day">
+                                            ${result.day}
+                                        </span>
+                                    </a>
+                                    <div class="event-summary__content">
+                                        <h5 class="event-summary__title headline headline--tiny">
+                                            <a href="<?= get_the_permalink(); ?>">
+                                                ${result.title}
+                                            </a>
+                                        </h5>
+                                        <p>
+                                            ${result.description}
+                                            <a href="${result.permalink}" class="nu gray">
+                                                Learn more
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                    <div>
+                </div>
+            `)
+            this.isSpinnerVisible = false;
         });
     }
 }

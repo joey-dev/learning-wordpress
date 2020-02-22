@@ -56,7 +56,7 @@ while(have_posts()):
 
         <div class="generic-content">
             <?php
-            the_content();
+            the_field('main_body_content');
             ?>
         </div>
 
