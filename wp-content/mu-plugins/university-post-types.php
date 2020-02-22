@@ -39,6 +39,7 @@ function university_post_types() {
     ]);
 
     register_post_type('professor', [
+        'show_in_rest' => true,
         'supports' => [
             'title', 'editor', 'thumbnail',
         ],

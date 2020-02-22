@@ -103,6 +103,7 @@ class Search {
                         ${results.map(result => `
                             <li>
                                 <a href="${result.link}">${result.title.rendered}</a>
+                                ${result.type === 'post' ? `by ${result.author_name}` : ''}
                             </li>
                         `).join('')}
                     ${results.length ? '</ul>' : ''}
