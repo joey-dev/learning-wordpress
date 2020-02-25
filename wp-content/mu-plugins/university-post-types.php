@@ -1,6 +1,8 @@
 <?php
 function university_post_types() {
 	register_post_type('event', [
+	    'capability_type' => 'event',
+		'map_meta_cap' => true,
 		'supports' => [
 			'title', 'editor', 'excerpt',
 		],

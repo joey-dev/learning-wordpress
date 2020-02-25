@@ -135,3 +135,50 @@ function university_adjust_queries_not_admin_program(WP_Query $query) {
 }
 
 add_action('pre_get_posts', 'university_adjust_queries');
+
+add_action('admin_init', 'redirect_subs_to_frontend');
+
+function redirect_subs_to_frontend() {
+    $user = wp_get_current_user();
+
+    if (count($user->roles) === 1 && $user->roles[0] === 'subscriber') {
+        wp_redirect(site_url('/'));
+        exit();
+    }
+}
+
+add_action('wp_loaded', 'no_subs_admin_bar');
+
+function no_subs_admin_bar() {
+    $user = wp_get_current_user();
+
+    if (count($user->roles) === 1 && $user->roles[0] === 'subscriber') {
+        show_admin_bar(false);
+    }
+}
+
+add_filter('login_headerurl', 'our_header_url');
+
+function our_header_url() {
+    return site_url('/');
+}
+
+add_action('login_enqueue_scripts', 'login_scc');
+
+function login_scc() {
+    wp_enqueue_style(
+        'university_main_styles',
+        get_stylesheet_uri()
+    );
+
+    wp_enqueue_style(
+        'font-google',
+        'https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i'
+    );
+}
+
+add_filter('login_headertitle', 'login_title');
+
+function login_title() {
+    return get_bloginfo('name');
+}
