@@ -20,14 +20,14 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 
-if (file_exists(dirname(__FILE__) . 'local.php')) {
-    define( 'DB_NAME', 'joeys339_university_date' );
+if (file_exists(dirname(__FILE__) . '/local.php')) {
+    define( 'DB_NAME', 'learn_wordpress' );
     define( 'DB_USER', 'root' );
     define( 'DB_PASSWORD', '' );
     define( 'DB_HOST', 'localhost' );
 } else {
-    define( 'DB_NAME', 'learn_wordpress' );
-    define( 'DB_USER', 'oeys339_root' );
+    define( 'DB_NAME', 'joeys339_university_date' );
+    define( 'DB_USER', 'joeys339_root' );
     define( 'DB_PASSWORD', 'F6,EQ5!Tyn&C' );
     define( 'DB_HOST', 'localhost' );
 }
