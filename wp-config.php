@@ -19,22 +19,20 @@
  */
 
 // ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-define( 'DB_NAME', 'learn_wordpress' );
 
-/** MySQL database username */
-define( 'DB_USER', 'root' );
+if (file_exists(dirname(__FILE__) . 'local.php')) {
+    define( 'DB_NAME', 'joeys339_university_date' );
+    define( 'DB_USER', 'root' );
+    define( 'DB_PASSWORD', '' );
+    define( 'DB_HOST', 'localhost' );
+} else {
+    define( 'DB_NAME', 'learn_wordpress' );
+    define( 'DB_USER', 'oeys339_root' );
+    define( 'DB_PASSWORD', 'F6,EQ5!Tyn&C' );
+    define( 'DB_HOST', 'localhost' );
+}
 
-/** MySQL database password */
-define( 'DB_PASSWORD', '' );
-
-/** MySQL hostname */
-define( 'DB_HOST', 'localhost' );
-
-/** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8mb4' );
-
-/** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
 /**#@+
